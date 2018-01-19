@@ -1,0 +1,30 @@
+{
+    "name": "chatting-room",
+    "version": "0.1.0",
+    "description": "Simple ChattingRoom",
+    "main": "main.js",
+    "scripts": {
+        "start": "node main.js"
+    },
+    "keywords": [
+        "koa",
+        "router",
+        "nunjucks",
+        "websocket"
+    ],
+    "author": "Jerry",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Jerry-Mr-Xu/ChattingRoom.git"
+    },
+    "dependencies": {
+        "koa": "2.4.1",
+        "koa-router": "7.3.0",
+        "koa-bodyparser": "4.2.0",
+        "nunjucks": "3.0.1",
+        "mime": "2.2.0",
+        "mz": "2.7.0",
+        "ws": "4.0.0"
+    }
+}
