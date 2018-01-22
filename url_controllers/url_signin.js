@@ -1,5 +1,7 @@
 'use strict';
 
+const ModelManager = require("../model_controllers/_manager");
+
 var index = 0;
 
 var loginArray = [{
@@ -18,16 +20,38 @@ var loginArray = [{
         let password = context.request.body.password;
 
         // 这里是暂时这样判断，之后要改为从数据库中查找
-        if (username === 'xujierui' && password === '1104') {
-            // 暂时用于生成id
-            index++;
+        // if (username === 'xujierui' && password === '1104') {
+        //     // 暂时用于生成id
+        //     index++;
 
-            // 拼装userInfo对象
+        //     // 拼装userInfo对象
+        //     let userInfoObj = {
+        //         id: index,
+        //         name: username,
+        //         image: index % 10
+        //     };
+        //     // 将userInfo对象转为base64编码字符串
+        //     let userInfoStr = Buffer.from(JSON.stringify(userInfoObj)).toString('base64');
+        //     console.log(`Set cookie value: ${userInfoStr}`);
+        //     // 将userInfo装入cookies
+        //     context.cookies.set('name', userInfoStr);
+        //     // 登录成功跳到主界面
+        //     context.response.redirect('/main');
+        // }
+        
+        // 从数据库中查找该用户名
+        let UserModel = ModelManager.getModel('user');
+        let user = await UserModel.findOne({
+            where: {
+                username: username
+            }
+        });
+        if (user.password === password) {
             let userInfoObj = {
-                id: index,
+                id: user.uuid,
                 name: username,
-                image: index % 10
-            };
+                image: Math.floor(Math.random() * 10)
+            }
             // 将userInfo对象转为base64编码字符串
             let userInfoStr = Buffer.from(JSON.stringify(userInfoObj)).toString('base64');
             console.log(`Set cookie value: ${userInfoStr}`);
@@ -35,6 +59,8 @@ var loginArray = [{
             context.cookies.set('name', userInfoStr);
             // 登录成功跳到主界面
             context.response.redirect('/main');
+        } else {
+            console.error(`Invalid password`);
         }
     }
 }];

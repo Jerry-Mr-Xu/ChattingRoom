@@ -93,6 +93,14 @@ let Util = {
             user: user,
             data: data
         });
+    },
+    encrypt: (data) => {
+        // 加密
+        return data;
+    },
+    decrypt: (data) => {
+        // 解密
+        return data;
     }
 };
 

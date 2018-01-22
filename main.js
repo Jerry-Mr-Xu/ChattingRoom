@@ -4,10 +4,27 @@ const Koa = require('koa');
 const getRouterWithNeedParser = require('./url_controllers/_manager');
 const putRenderFn = require('./nunjucks_helper');
 const Util = require('./utils');
+const ModelManager = require('./model_controllers/_manager');
 
 // 是否正式发布
 const isProduction = process.env.NODE_ENV === 'production';
 const koa = new Koa();
+
+
+(async () => {
+    console.log('something');
+    // 初始化数据库
+    await ModelManager.sync();
+    let User = ModelManager.getModel('user');
+    let user = await User.create({
+        username: 'xujierui',
+        password: '1104',
+        createdAt: 0,
+        updatedAt: 0,
+        version: 0
+    });
+    console.log(JSON.stringify(user));
+})();
 
 // 此中间件用以统计加载页面的时间
 koa.use(async (context, next) => {
