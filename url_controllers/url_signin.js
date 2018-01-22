@@ -25,7 +25,8 @@ var loginArray = [{
             // 拼装userInfo对象
             let userInfoObj = {
                 id: index,
-                name: username
+                name: username,
+                image: index % 10
             };
             // 将userInfo对象转为base64编码字符串
             let userInfoStr = Buffer.from(JSON.stringify(userInfoObj)).toString('base64');

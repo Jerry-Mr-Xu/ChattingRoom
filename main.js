@@ -42,4 +42,32 @@ koa.use(putRenderFn('views', {
 
 koa.use(router.routes());
 
-koa.listen(3000);
+let server = koa.listen(3000);
+
+function onConnect() {
+    let user = this.user;
+    let msg = Util.createMessage('join', user, `${user.name} 进入房间.`);
+    this.wss.broadcast(msg);
+    // build user list:
+    let users = [];
+    this.wss.clients.forEach(client => {
+        users.push(client.user);
+    });
+    this.send(Util.createMessage('list', user, users));
+}
+
+function onMessage(message) {
+    console.log(message);
+    if (message && message.trim()) {
+        let msg = Util.createMessage('chat', this.user, message.trim());
+        this.wss.broadcast(msg);
+    }
+}
+
+function onClose() {
+    let user = this.user;
+    let msg = Util.createMessage('left', user, `${user.name} is left.`);
+    this.wss.broadcast(msg);
+}
+
+koa.wss = Util.createWebSocketServer(server, onConnect, onMessage, onClose);
