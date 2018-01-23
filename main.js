@@ -12,18 +12,13 @@ const koa = new Koa();
 
 
 (async () => {
-    console.log('something');
     // 初始化数据库
     await ModelManager.sync();
     let User = ModelManager.getModel('user');
     let user = await User.create({
         username: 'xujierui',
         password: '1104',
-        createdAt: 0,
-        updatedAt: 0,
-        version: 0
     });
-    console.log(JSON.stringify(user));
 })();
 
 // 此中间件用以统计加载页面的时间

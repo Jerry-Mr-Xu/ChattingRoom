@@ -5,14 +5,29 @@ const Sequelize = require('sequelize');
 var Factory = {
     defaultHooks: {
         beforeCreate: (record) => {
+            // 在创建记录之前把创建时间更新时间和版本号加上
             let now = Date.now();
             record.createdAt = now;
             record.updatedAt = now;
             record.version = 0;
         },
         beforeUpdate: (record) => {
+            // 在更新记录之前把更新时间加上
             let now = Date.now();
             record.updatedAt = now;
+        },
+        beforeValidate: (record) => {
+            // 这个是为了解决在beforeCreate之前会进行数据完整性检测
+            // 而此时createdAt、updatedAt和version并不存在会报出这些值不能为空的错误
+            if (!record.createdAt) {
+                record.createdAt = 0;
+            }
+            if (!record.updatedAt) {
+                record.updatedAt = 0;
+            }
+            if (!record.version) {
+                record.version = 0;
+            }
         }
     },
     packModel: function (sequelize, modelObj) {
